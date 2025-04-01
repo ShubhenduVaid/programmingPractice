@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="./index.js"></script> -->
+  </head>
+  <style>
+    h1 {
+      color: red;
+    }
+  </style>
+  <body>
+    <h1 id="heading">Atlassian Marketplace</h1>
+    <install-app-banner
+      id="installApp"
+      data-title="The Awesome Marketplace app"
+      data-description="I am awesome because I am AWESOME!"
+    ></install-app-banner>
+  </body>
+  <script src="./index.js"></script>
+  <script>
+    document.getElementById("installApp").addEventListener("install", () => {
+      alert("App install in progress");
+      document.getElementById("heading").innerText = "App install in progress";
+    });
+  </script>
+</html>

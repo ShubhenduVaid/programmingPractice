@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="./index.js"></script> -->
+  </head>
+  <body>
+    <h1 id="heading">Atlassian Marketplace</h1>
+    <button id="changeTitleButton">Change app banner Title</button>
+    <install-app-banner
+      id="installApp"
+      data-title="The Awesome Marketplace app"
+      data-description="I am awesome because I am AWESOME!"
+    ></install-app-banner>
+  </body>
+  <script src="./index.js"></script>
+  <script>
+    document.getElementById("installApp").addEventListener("install", () => {
+      document.getElementById("heading").innerText = "App install in progress";
+    });
+
+    changeTitleButton.addEventListener("click", () => {
+      document
+        .getElementById("installApp")
+        .setAttribute("data-title", "I M' Batman");
+    });
+  </script>
+</html>

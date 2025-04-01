@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <script src="./index.js"></script> -->
+  </head>
+  <body>
+    <h1 id="heading">Atlassian Marketplace</h1>
+    <button id="changeTitleButton">Change app banner Title</button>
+    <install-app-banner
+      id="installApp"
+      data-title="The dark knight rise"
+      data-description="With power comes responsibilities"
+    >
+      <ul slot="app-details">
+        <li>It will save you from Joker!</li>
+        <li>Gotham City needs it now!</li>
+      </ul>
+    </install-app-banner>
+  </body>
+  <script src="./index.js"></script>
+  <script>
+    document.getElementById("installApp").addEventListener("install", () => {
+      document.getElementById("heading").innerText = "App install in progress";
+    });
+
+    changeTitleButton.addEventListener("click", () => {
+      document
+        .getElementById("installApp")
+        .setAttribute("data-title", "I M' Batman");
+    });
+  </script>
+</html>
