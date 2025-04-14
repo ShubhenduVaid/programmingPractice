@@ -1,7 +1,7 @@
 // Array
 
 function arrayValidation(array) {
-  return !Array.isArray(array) && array.length < 1;
+  return !Array.isArray(array) || array.length < 1;
 }
 
 function squareArray(array) {
@@ -24,10 +24,10 @@ console.log(filterByLength(["cat", "elephant", "dog", "hippopotamus"], 3));
 
 function findOldest(array) {
   if (arrayValidation(array)) {
-    return [];
+    return "";
   }
   let oldest = array[0];
-  array.filter((item) => {
+  array.map((item) => {
     if (item.age > oldest.age) {
       oldest = item;
     }
@@ -45,11 +45,11 @@ console.log(
 
 function sumOfEven(array) {
   if (arrayValidation(array)) {
-    return [];
+    return 0;
   }
   return array
     .filter((item) => item % 2 === 0)
-    .reduce((item, count) => {
+    .reduce((count, item) => {
       count += item;
       return count;
     }, 0);
@@ -69,7 +69,7 @@ function commonElementsInArray(array1, array2) {
   array1.forEach((element) => (obj1[element] = element));
   array2.forEach((element) => (obj2[element] = element));
 
-  Object.keys(obj1).forEach((elem) => {
+  Object.values(obj1).forEach((elem) => {
     if (obj2[elem]) {
       finalArr.push(elem);
     }
@@ -86,7 +86,7 @@ function removeDuplicates(array) {
   }
   let obj = {};
   array.forEach((element) => (obj[element] = element));
-  return Object.keys(obj);
+  return Object.values(obj);
 }
 
 console.log(removeDuplicates([1, 2, 2, 3, 3, 4]));
@@ -104,26 +104,29 @@ function findLongestString(array) {
   if (arrayValidation(array)) {
     return [];
   }
-  return array.reduce(
-    (item, maxObj) => {
-      if (item.length > maxObj.length) {
-        maxObj = { length: item.length, item: item };
-      }
-      return maxObj;
-    },
-    { length: 0, item: "" }
-  ).item.item;
+  return array.reduce((item, maxObj) => {
+    if (item.length > maxObj.length) {
+      maxObj = { length: item.length, item: item };
+    }
+    return maxObj;
+  }, "").item.item;
 }
 
 console.log(findLongestString(["cat", "elephant", "dog", "rat"]));
 
 function flattenArray(array) {
+  if (arrayValidation(array)) {
+    return [];
+  }
   return array.flat().flat();
 }
 
 console.log(flattenArray([1, [2, 3], [4, [5, 6]]]));
 
 function concatArray(array) {
+  if (arrayValidation(array)) {
+    return [];
+  }
   return array.flat();
 }
 
