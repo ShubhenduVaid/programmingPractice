@@ -2,7 +2,7 @@ import { BasePlayer } from "./BasePlayer.js";
 import { Bolt } from "./Bolt.js";
 
 const heroSprite = new Image();
-heroSprite.src = "./src/assets/knight-run.png";
+heroSprite.src = "./assets/knight-run.png"; // Updated path
 let isHeroSpriteLoaded = false;
 
 heroSprite.onload = () => {

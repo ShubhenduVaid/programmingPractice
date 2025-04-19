@@ -3,7 +3,7 @@ import { PlasmaBall } from "./PlasmaBall.js";
 import { Bolt } from "./Bolt.js";
 
 const enemySprite = new Image();
-enemySprite.src = "./src/assets/enemy-run.png";
+enemySprite.src = "./assets/enemy-run.png"; // Updated path
 let isEnemySpriteLoaded = false;
 
 enemySprite.onload = () => {
