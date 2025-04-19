@@ -24,19 +24,60 @@ export class Enemy extends BasePlayer {
     this.isDodging = false;
     this.dodgeDirection = 1;
     this.dodgeCooldown = 60;
+
+    // Reduce initial difficulty properties
+    this.difficultyLevel = 1;
+    this.baseAccuracyError = 0.2; // Increased from 0.1 for more initial spread
+    this.baseFireRate = 0.015; // Reduced from 0.03 for slower initial firing
+    this.baseDodgeDistance = 300; // Reduced from 400 for less dodging
+  }
+
+  updateDifficultyLevel(score) {
+    this.difficultyLevel = Math.floor(score / 500) + 1;
+
+    // More gradual accuracy and fire rate scaling
+    this.baseAccuracyError = Math.max(
+      0.2 - (this.difficultyLevel - 1) * 0.015,
+      0.02
+    );
+    this.baseFireRate = Math.min(
+      0.015 + (this.difficultyLevel - 1) * 0.008,
+      0.08
+    );
+    this.baseDodgeDistance = Math.min(
+      300 + (this.difficultyLevel - 1) * 40,
+      600
+    );
   }
 
   calculateTargetAngle(targetPlayer) {
     const dx = targetPlayer.x - this.x;
     const dy = targetPlayer.y - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
-    const gravity = 0.03;
-    const plasmaSpeed = 12;
+
+    // Scale gravity effect based on canvas width
+    const canvasWidth = document.querySelector("canvas").width;
+    const baseGravity = 0.03;
+    const gravityScale = Math.min(1920 / canvasWidth, 2);
+    const gravity = baseGravity * gravityScale;
+
+    // Adjust plasma speed based on distance and difficulty
+    const basePlasmaSpeed = 12;
+    const distanceScale = Math.min(distance / 800, 1.5);
+    const plasmaSpeed = basePlasmaSpeed * distanceScale;
+
     const time = distance / plasmaSpeed;
+
+    // Enhanced prediction of target movement
+    const predictedX = targetPlayer.x + targetPlayer.velocity.x * time * 0.5;
+    const predictedY = targetPlayer.y + targetPlayer.velocity.y * time * 0.5;
+
+    // Calculate gravity compensation
     const gravityAdjustment = 0.5 * gravity * time * time;
-    const targetY =
-      targetPlayer.y - gravityAdjustment + targetPlayer.velocity.y * time;
-    return Math.atan2(targetY - this.y, dx);
+
+    // Aim at predicted position with gravity compensation
+    const targetY = predictedY - gravityAdjustment;
+    return Math.atan2(targetY - this.y, predictedX - this.x);
   }
 
   shouldDodge(projectiles) {
@@ -48,15 +89,8 @@ export class Enemy extends BasePlayer {
         const dy = projectile.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
-        const futureX = projectile.x + projectile.velocity.x * 5;
-        const futureY = projectile.y + projectile.velocity.y * 5;
-        const futureDx = futureX - this.x;
-        const futureDy = futureY - this.y;
-        const futureDistance = Math.sqrt(
-          futureDx * futureDx + futureDy * futureDy
-        );
-
-        if (futureDistance < distance && distance < 400) {
+        // Use enhanced dodge distance based on difficulty
+        if (distance < this.baseDodgeDistance) {
           const platformSpace = {
             left: this.x - (this.platform.x - this.platform.width / 2),
             right: this.platform.x + this.platform.width / 2 - this.x,
@@ -89,22 +123,39 @@ export class Enemy extends BasePlayer {
 
       const dx = targetPlayer.x - this.x;
       const distance = Math.abs(dx);
-      const optimalDistance = 350;
       const shouldFire =
-        Math.random() < 0.03 && !this.isDodging && this.aiUpdateTimer > 180;
+        Math.random() < this.baseFireRate &&
+        !this.isDodging &&
+        this.aiUpdateTimer > Math.max(180 - this.difficultyLevel * 20, 100);
 
       if (shouldFire && projectiles) {
         const targetAngle = this.calculateTargetAngle(targetPlayer);
-        const accuracyFactor = Math.min(distance / 2000, 0.1);
+        const distance = Math.abs(targetPlayer.x - this.x);
+
+        // Scale accuracy based on distance and difficulty
+        const baseAccuracy = this.baseAccuracyError;
+        const distanceAccuracy = Math.min(distance / 1200, 0.2);
+        const accuracyFactor = Math.min(
+          distanceAccuracy * (1 - (this.difficultyLevel - 1) * 0.15),
+          baseAccuracy
+        );
+
         const randomSpread = (Math.random() - 0.5) * accuracyFactor;
+
+        // Scale plasma speed with distance and difficulty
+        const baseSpeed = 10;
+        const distanceBonus = Math.min(distance / 800, 1.5);
+        const difficultyBonus = Math.min(this.difficultyLevel * 0.5, 2);
+        const plasmaSpeed = baseSpeed * distanceBonus * (1 + difficultyBonus);
+
         const plasma = new PlasmaBall(
           this.x,
           this.y,
           targetAngle + randomSpread,
-          12
+          plasmaSpeed
         );
         projectiles.push(plasma);
-        this.aiUpdateTimer = -120;
+        this.aiUpdateTimer = -Math.max(120 - this.difficultyLevel * 10, 80);
       }
     }
 

@@ -32,12 +32,16 @@ export class GameManager {
     const platformWidth = this.canvas.width * 0.15;
     const platformHeight = this.canvas.height * 0.15;
 
-    // Create platforms - hero platform 20% bigger
+    // Create platforms - ensure hero platform stays within bounds
+    const heroPlatformWidth = platformWidth * 1.8;
+    const minX = heroPlatformWidth / 2; // Ensure left edge stays on screen
+    const heroX = Math.max(minX, this.canvas.width * 0.1);
+
     this.platform1 = new Platform(
-      this.canvas.width * 0.1,
+      heroX,
       this.canvas.height * 0.5,
-      platformWidth * 1.2, // 20% wider
-      platformHeight * 1.2, // 20% taller
+      heroPlatformWidth,
+      platformHeight * 1.8,
       true
     );
 
@@ -77,10 +81,14 @@ export class GameManager {
       star.canvasHeight = canvasHeight;
     });
 
-    // Update platform 1 with 20% larger size
-    this.platform1.x = canvasWidth * 0.1;
+    // Update platform 1 with bounds checking
+    const heroPlatformWidth = platformWidth * 1.8;
+    const minX = heroPlatformWidth / 2;
+    const heroX = Math.max(minX, canvasWidth * 0.1);
+
+    this.platform1.x = heroX;
     this.platform1.y = canvasHeight * 0.5;
-    this.platform1.width = platformWidth * 1.2;
+    this.platform1.width = heroPlatformWidth;
     this.platform1.height = platformHeight * 1.2;
 
     // Update platform 2
@@ -107,6 +115,9 @@ export class GameManager {
     }
 
     if (!this.gameOver) {
+      // Update enemy difficulty based on score
+      this.player2.updateDifficultyLevel(this.score);
+
       if (this.currentPlayer.isHero && this.currentPlayer.isCharging) {
         this.currentPlayer.power = Math.min(
           this.currentPlayer.power + 60 * deltaTime,

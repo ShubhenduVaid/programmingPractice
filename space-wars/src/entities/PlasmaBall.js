@@ -10,10 +10,10 @@ export class PlasmaBall {
     const canvas = document.querySelector("canvas");
     const scaleFactors = getProjectileScaleFactors(canvas.width, canvas.height);
 
-    // Apply scale to velocity
+    // Apply scale to velocity with increased power
     this.velocity = {
-      x: Math.cos(angle) * power * scaleFactors.powerScale,
-      y: Math.sin(angle) * power * scaleFactors.powerScale,
+      x: Math.cos(angle) * power * 1.5 * scaleFactors.powerScale,
+      y: Math.sin(angle) * power * 1.5 * scaleFactors.powerScale,
     };
 
     this.scaleFactors = scaleFactors; // Store for update method
@@ -27,12 +27,12 @@ export class PlasmaBall {
     this.lifetime -= deltaTime * 60;
     if (this.lifetime <= 0) return false;
 
-    // Scale velocity changes with deltaTime
-    this.velocity.y += this.scaleFactors.gravityScale * deltaTime * 60;
+    // Reduce gravity effect for longer range
+    this.velocity.y += this.scaleFactors.gravityScale * 0.7 * deltaTime * 60;
     this.velocity.x *= Math.pow(
       this.scaleFactors.airResistance,
-      deltaTime * 30
-    );
+      deltaTime * 15
+    ); // Reduced air resistance
 
     this.x += this.velocity.x * deltaTime * 30;
     this.y += this.velocity.y * deltaTime * 30;
