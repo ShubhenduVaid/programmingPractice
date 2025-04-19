@@ -4,6 +4,17 @@ export class InputManager {
   constructor(gameManager) {
     this.gameManager = gameManager;
     this.setupEventListeners();
+
+    this.joystickBase = document.querySelector(".joystick-base");
+    this.joystickStick = document.querySelector(".joystick-stick");
+    this.shootButton = document.querySelector(".shoot-button");
+    this.isTouchDevice = "ontouchstart" in window;
+    this.isJoystickActive = false;
+    this.joystickData = { x: 0, y: 0 };
+
+    if (this.isTouchDevice) {
+      this.setupTouchControls();
+    }
   }
 
   setupEventListeners() {
@@ -24,6 +35,38 @@ export class InputManager {
     this.gameManager.canvas.addEventListener(
       "click",
       this.handleClick.bind(this)
+    );
+  }
+
+  setupTouchControls() {
+    // Joystick controls
+    this.joystickBase.addEventListener(
+      "touchstart",
+      this.handleJoystickStart.bind(this)
+    );
+    this.joystickBase.addEventListener(
+      "touchmove",
+      this.handleJoystickMove.bind(this)
+    );
+    this.joystickBase.addEventListener(
+      "touchend",
+      this.handleJoystickEnd.bind(this)
+    );
+
+    // Shoot button
+    this.shootButton.addEventListener(
+      "touchstart",
+      this.handleShootStart.bind(this)
+    );
+    this.shootButton.addEventListener(
+      "touchend",
+      this.handleShootEnd.bind(this)
+    );
+
+    // Canvas touch for aiming
+    this.gameManager.canvas.addEventListener(
+      "touchmove",
+      this.handleTouchAim.bind(this)
     );
   }
 
@@ -147,6 +190,73 @@ export class InputManager {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     this.gameManager.handleClick(x, y);
+  }
+
+  handleJoystickStart(e) {
+    e.preventDefault();
+    this.isJoystickActive = true;
+    this.handleJoystickMove(e);
+  }
+
+  handleJoystickMove(e) {
+    if (!this.isJoystickActive) return;
+
+    const touch = e.touches[0];
+    const rect = this.joystickBase.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    let dx = touch.clientX - centerX;
+    let dy = touch.clientY - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const maxDistance = rect.width / 2;
+
+    if (distance > maxDistance) {
+      dx = (dx / distance) * maxDistance;
+      dy = (dy / distance) * maxDistance;
+    }
+
+    this.joystickStick.style.transform = `translate(${dx}px, ${dy}px)`;
+
+    // Update player movement
+    const player = this.gameManager.player1;
+    player.isMovingLeft = dx < -10;
+    player.isMovingRight = dx > 10;
+    player.isMovingUp = dy < -10;
+    player.isMovingDown = dy > 10;
+  }
+
+  handleJoystickEnd() {
+    this.isJoystickActive = false;
+    this.joystickStick.style.transform = "translate(-50%, -50%)";
+
+    const player = this.gameManager.player1;
+    player.isMovingLeft = false;
+    player.isMovingRight = false;
+    player.isMovingUp = false;
+    player.isMovingDown = false;
+  }
+
+  handleShootStart(e) {
+    e.preventDefault();
+    this.handleMouseDown();
+  }
+
+  handleShootEnd(e) {
+    e.preventDefault();
+    this.handleMouseUp();
+  }
+
+  handleTouchAim(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = this.gameManager.canvas.getBoundingClientRect();
+
+    this.handleMouseMove({
+      clientX: touch.clientX,
+      clientY: touch.clientY,
+      preventDefault: () => {},
+    });
   }
 
   createProjectile() {

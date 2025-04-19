@@ -2,14 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ragdoll Archers</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
+        
+        .mobile-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: none;
+            touch-action: none;
+        }
+        
+        .joystick-base {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .joystick-stick {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .shoot-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: none;
+            touch-action: none;
+        }
+        
+        @media (max-width: 1024px) {
+            .mobile-controls, .shoot-button {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="mobile-controls">
+        <div class="joystick-base">
+            <div class="joystick-stick"></div>
+        </div>
+    </div>
+    <div class="shoot-button"></div>
     <script type="module" src="src/main.js"></script>
 </body>
 </html>
