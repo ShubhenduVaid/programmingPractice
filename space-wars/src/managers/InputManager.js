@@ -53,10 +53,14 @@ export class InputManager {
       this.handleJoystickEnd.bind(this)
     );
 
-    // Shoot button
+    // Update shoot button controls for aiming and firing
     this.shootButton.addEventListener(
       "touchstart",
       this.handleShootStart.bind(this)
+    );
+    this.shootButton.addEventListener(
+      "touchmove",
+      this.handleShootMove.bind(this)
     );
     this.shootButton.addEventListener(
       "touchend",
@@ -239,11 +243,38 @@ export class InputManager {
 
   handleShootStart(e) {
     e.preventDefault();
+    this.shootStartPosition = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
     this.handleMouseDown();
+  }
+
+  handleShootMove(e) {
+    e.preventDefault();
+    if (this.shootStartPosition) {
+      const touch = e.touches[0];
+      const currentPlayer = this.gameManager.currentPlayer;
+
+      // Calculate angle from player to touch position
+      const dx = this.shootStartPosition.x - touch.clientX;
+      const dy = this.shootStartPosition.y - touch.clientY;
+      let angle = Math.atan2(dy, dx);
+
+      // Limit angle to 20 degrees up/down
+      const twentyDegrees = (20 * Math.PI) / 180;
+      if (currentPlayer === this.gameManager.player1) {
+        if (angle > twentyDegrees) angle = twentyDegrees;
+        if (angle < -twentyDegrees) angle = -twentyDegrees;
+      }
+
+      currentPlayer.angle = angle;
+    }
   }
 
   handleShootEnd(e) {
     e.preventDefault();
+    this.shootStartPosition = null;
     this.handleMouseUp();
   }
 
