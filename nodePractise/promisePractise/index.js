@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 
 const { taskCreation } = require("./task/task");
+const { polling } = require("./polling");
 
 const app = express();
 const PORT = 3000;
@@ -22,6 +23,10 @@ app.get("/", async (req, res) => {
     status: "200",
     response: { message: taskResult },
   });
+});
+
+app.get("/polling", async (req, res) => {
+  polling();
 });
 
 app.listen(PORT, () => {
