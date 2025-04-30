@@ -1,0 +1,11 @@
+.job-title {
+    font-weight: bolder;
+    font-size: 1.1em;
+    margin-top: 20px;
+}
+.job-details {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
+}

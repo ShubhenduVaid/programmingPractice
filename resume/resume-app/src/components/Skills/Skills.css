@@ -1,0 +1,17 @@
+.skillsContainer{
+    padding-top:10px;
+    padding-bottom:10px;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 5px;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+.skills-grid div {
+    padding: 5px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
