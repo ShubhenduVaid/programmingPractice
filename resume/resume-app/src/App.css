@@ -1,14 +1,22 @@
 .container {
-    max-width: 900px;
-    margin: 0 auto;
+    width: 210mm;
+    min-height: 297mm;
+    padding: 10mm;
+    margin: 10mm auto;
+    border-radius: 5px;
+    background: white;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
 .content {
     display: flex;
 }
+
 .left-column {
     width: 60%;
     padding-right: 20px;
 }
+
 .right-column {
     width: 40%;
 }
@@ -18,11 +26,50 @@ h3 {
     margin-top: 20px;
     color: #1a73e8;
 }
+
 ul {
     padding-left: 20px;
     margin: 10px 0;
 }
+
 li {
     margin-bottom: 8px;
     font-size: 0.9em;
+}
+
+@media print {
+    .container {
+        width: 210mm;
+        height: 297mm;
+        padding: 10mm 20mm 20mm;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: none;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    
+    @page {
+        margin: 0;
+    }
+
+    .job-title {
+        break-before: auto;
+        break-after: avoid;
+        margin-top: 0;
+    }
+
+    /* Add top margin to job titles that appear at the start of a new page */
+    .job-title:first-child {
+        margin-top: 20mm;
+    }
+
+    .content {
+        page-break-inside: auto;
+    }
+
+    li {
+        break-inside: avoid;
+    }
 }
