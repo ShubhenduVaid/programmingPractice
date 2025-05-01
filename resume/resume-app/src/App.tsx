@@ -5,19 +5,17 @@ import Header from "./components/Header";
 import JobDetails from "./components/JobDetails";
 import Skills from "./components/Skills";
 import SkillsExpanded from "./components/SkillsExpanded";
-import {
-  information,
-  jobDescriptionList,
-  careerSummary,
-  techSkills,
-  softSkills,
-  findMeOnline,
-  education,
-} from "./Information";
+import { information } from "./config";
 
 function App() {
   const {
     header: { name, designation, contactInfo },
+    jobDescriptionList,
+    careerSummary,
+    techSkills,
+    softSkills,
+    findMeOnline,
+    education,
   } = information;
   return (
     <div className="container">

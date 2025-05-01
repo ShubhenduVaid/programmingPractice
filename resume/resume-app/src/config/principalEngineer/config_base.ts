@@ -1,59 +1,22 @@
-export type Header = {
-  name: string;
-  designation: string;
+import {
+  CareerSummary,
+  FindMeOnline,
+  JobDetail,
+  ResumeType,
+  Skills,
+  SkillsExpanded,
+} from "../config.types";
+
+const header = {
+  name: "Shubhendu Vaid",
+  designation: "Principal Engineer",
   contactInfo: {
-    email: string;
-    phoneNumber: string;
-  };
-};
-
-export type JobDetail = {
-  title: string;
-  detail: {
-    companyName: string;
-    from: string;
-    to: string;
-    location: string;
-  };
-  details: Array<string>;
-};
-
-export type ResumeType = {
-  header: Header;
-};
-
-export type CareerSummary = {
-  headline: string;
-  highlights: Array<string>;
-};
-
-export type Skills = {
-  skillType: string;
-  skills: Array<string>;
-};
-
-export type FindMeOnline = {
-  heading: string;
-  links: Array<{ name: string; url: string }>;
-};
-
-export type SkillsExpanded = {
-  skillType: string;
-  skills: Array<{ detail1: string; detail2: string; detail3: string }>;
-};
-
-export const information: ResumeType = {
-  header: {
-    name: "Shubhendu Vaid",
-    designation: "Principal Engineer",
-    contactInfo: {
-      email: "vaidshubhendu@gmail.com",
-      phoneNumber: "07835735172",
-    },
+    email: "vaidshubhendu@gmail.com",
+    phoneNumber: "07835735172",
   },
 };
 
-export const jobDescriptionList: Array<JobDetail> = [
+const jobDescriptionList: Array<JobDetail> = [
   {
     title: "Principal Engineer",
     detail: {
@@ -162,7 +125,7 @@ export const jobDescriptionList: Array<JobDetail> = [
   },
 ];
 
-export const careerSummary: CareerSummary = {
+const careerSummary: CareerSummary = {
   headline:
     "Engineering Leader with 14+ years of experience delivering scalable, high-quality software.",
   highlights: [
@@ -173,7 +136,7 @@ export const careerSummary: CareerSummary = {
   ],
 };
 
-export const techSkills: Skills = {
+const techSkills: Skills = {
   skillType: "Technical Skills",
   skills: [
     "Next.js",
@@ -200,7 +163,7 @@ export const techSkills: Skills = {
   ],
 };
 
-export const softSkills: Skills = {
+const softSkills: Skills = {
   skillType: "Soft Skills",
   skills: [
     "Communication",
@@ -214,7 +177,7 @@ export const softSkills: Skills = {
   ],
 };
 
-export const findMeOnline: FindMeOnline = {
+const findMeOnline: FindMeOnline = {
   heading: "Find Me Online",
   links: [
     {
@@ -228,7 +191,7 @@ export const findMeOnline: FindMeOnline = {
   ],
 };
 
-export const education: SkillsExpanded = {
+const education: SkillsExpanded = {
   skillType: "Education",
   skills: [
     {
@@ -237,4 +200,14 @@ export const education: SkillsExpanded = {
       detail3: "India",
     },
   ],
+};
+
+export const information: ResumeType = {
+  header: header,
+  jobDescriptionList: jobDescriptionList,
+  careerSummary: careerSummary,
+  techSkills: techSkills,
+  softSkills: softSkills,
+  findMeOnline: findMeOnline,
+  education: education,
 };
