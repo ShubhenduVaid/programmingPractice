@@ -1,0 +1,11 @@
+.addCardFormContainer{
+    display: flex;
+    flex-direction: column;
+    margin: 0px 0px 10px 0px;
+    background-color: rgb(230, 215, 215);
+    color: black;
+    padding: 15px;
+    width: 500px;
+    gap: 10px;
+    border-radius: 5px;
+}
