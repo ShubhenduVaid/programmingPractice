@@ -1,10 +1,13 @@
 import { useState } from "react";
 
+import "./Todo.css";
+
 import TextEditInput from "../TextEditInput";
 import TextEditSelect from "../TextEditSelect";
 import TodoButton from "../TodoButton";
-import "./Todo.css";
-import { TodoType, TYPES } from "../../reducers";
+
+import { TYPES } from "../../reducers";
+import { useTodoContext } from "../../context";
 
 interface Priority {
   priority: "High" | "Medium" | "Low";
@@ -14,22 +17,9 @@ interface TodoProps {
   title: string;
   description: string;
   priority: Priority["priority"];
-  dispatch: React.ActionDispatch<
-    [
-      action: {
-        type: TYPES.ADD | TYPES.DELETE | TYPES.EDIT;
-        todo: TodoType;
-      }
-    ]
-  >;
 }
-export default function Todo({
-  id,
-  title,
-  description,
-  priority,
-  dispatch,
-}: TodoProps) {
+export default function Todo({ id, title, description, priority }: TodoProps) {
+  const { dispatch } = useTodoContext();
   const [isTodoEdit, setIsTodoEdit] = useState<boolean>(false);
   const [todoTitle, setTodoTitle] = useState<string>(title);
   const [todoDescription, setTodoDescription] = useState<string>(description);
