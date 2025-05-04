@@ -4,6 +4,7 @@ import TextEditInput from "../TextEditInput";
 import TextEditSelect from "../TextEditSelect";
 import TodoButton from "../TodoButton";
 import "./Todo.css";
+import { TodoType, TYPES } from "../../reducers";
 
 interface Priority {
   priority: "High" | "Medium" | "Low";
@@ -13,26 +14,21 @@ interface TodoProps {
   title: string;
   description: string;
   priority: Priority["priority"];
-  handleDelete: (id: number) => void;
-  handleEdit: ({
-    id,
-    title,
-    description,
-    priority,
-  }: {
-    id: number;
-    title: string;
-    description: string;
-    priority: Priority["priority"];
-  }) => void;
+  dispatch: React.ActionDispatch<
+    [
+      action: {
+        type: TYPES.ADD | TYPES.DELETE | TYPES.EDIT;
+        todo: TodoType;
+      }
+    ]
+  >;
 }
 export default function Todo({
   id,
   title,
   description,
   priority,
-  handleDelete,
-  handleEdit,
+  dispatch,
 }: TodoProps) {
   const [isTodoEdit, setIsTodoEdit] = useState<boolean>(false);
   const [todoTitle, setTodoTitle] = useState<string>(title);
@@ -64,13 +60,16 @@ export default function Todo({
         />
         <TodoButton
           handleTodoEdit={setIsTodoEdit}
-          handleDelete={() => handleDelete(id)}
+          handleDelete={() => dispatch({ type: TYPES.DELETE, todo: { id } })}
           handleEdit={() =>
-            handleEdit({
-              id: id,
-              title: todoTitle,
-              description: todoDescription,
-              priority: todoPriority,
+            dispatch({
+              type: TYPES.EDIT,
+              todo: {
+                id,
+                title: todoTitle,
+                description: todoDescription,
+                priority: todoPriority,
+              },
             })
           }
         />

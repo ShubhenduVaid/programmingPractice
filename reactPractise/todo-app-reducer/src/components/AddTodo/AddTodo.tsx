@@ -1,20 +1,20 @@
 import { useState } from "react";
 
 import "./AddTodo.css";
+import { TodoType, TYPES } from "../../reducers";
 
-interface AddTodoProps {
-  handleAdd: ({
-    title,
-    description,
-    priority,
-  }: {
-    title: string;
-    description: string;
-    priority: "Low" | "Medium" | "High";
-  }) => void;
-}
-
-export default function AddTodo({ handleAdd }: AddTodoProps) {
+export default function AddTodo({
+  dispatch,
+}: {
+  dispatch: React.ActionDispatch<
+    [
+      action: {
+        type: TYPES.ADD | TYPES.DELETE | TYPES.EDIT;
+        todo: TodoType;
+      }
+    ]
+  >;
+}) {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [priority, setPriority] = useState<"High" | "Medium" | "Low">("Low");
@@ -45,7 +45,7 @@ export default function AddTodo({ handleAdd }: AddTodoProps) {
       </select>
       <button
         onClick={() => {
-          handleAdd({ title, description, priority });
+          dispatch({ type: TYPES.ADD, todo: { title, description, priority } });
           setTitle("");
           setDescription("");
           setPriority("Low");
