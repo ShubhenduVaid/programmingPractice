@@ -1,20 +1,12 @@
 import { useState } from "react";
 
 import "./AddTodo.css";
-import { TodoType, TYPES } from "../../reducers";
 
-export default function AddTodo({
-  dispatch,
-}: {
-  dispatch: React.ActionDispatch<
-    [
-      action: {
-        type: TYPES.ADD | TYPES.DELETE | TYPES.EDIT;
-        todo: TodoType;
-      }
-    ]
-  >;
-}) {
+import { TYPES } from "../../reducers";
+import { useTodoContext } from "../../context";
+
+export default function AddTodo() {
+  const { dispatch } = useTodoContext();
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [priority, setPriority] = useState<"High" | "Medium" | "Low">("Low");

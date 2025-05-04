@@ -1,18 +1,8 @@
-import { TodoType, TYPES } from "../../reducers";
+import { useTodoContext } from "../../context";
 import Todo from "../Todo";
 
-interface TodosProps {
-  todos: TodoType[];
-  dispatch: React.ActionDispatch<
-    [
-      action: {
-        type: TYPES.ADD | TYPES.DELETE | TYPES.EDIT;
-        todo: TodoType;
-      }
-    ]
-  >;
-}
-export default function Todos({ todos, dispatch }: TodosProps) {
+export default function Todos() {
+  const { todos } = useTodoContext();
   return (
     <>
       {todos.length > 0 &&
@@ -23,7 +13,6 @@ export default function Todos({ todos, dispatch }: TodosProps) {
             title={title!}
             description={description!}
             priority={priority!}
-            dispatch={dispatch}
           />
         ))}
     </>
