@@ -1,0 +1,4 @@
+.chat { border: 1px solid #ccc; padding: 10px; height: 400px; overflow-y: scroll; }
+.message { width: 80%; padding: 5px; }
+.send { padding: 5px 10px; }
+.status { color: #888; }
